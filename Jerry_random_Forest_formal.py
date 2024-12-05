@@ -29,7 +29,7 @@ df_cleaned = df[(z_scores < 3).all(axis=1)]  # 删除Z-score大于3的异常值
 correlation_matrix = df_cleaned.corr()
 
 # 绘制热力图，查看各特征与目标变量的相关性
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(20, 12))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
 plt.title("Correlation Matrix")
 plt.show()
@@ -41,7 +41,7 @@ print(cor_target)
 
 # 选择和目标变量相关性较高的特征
 # 可以选择相关性高于某个阈值的特征，假设阈值为0.3
-selected_features = cor_target[cor_target.abs() > 0.2].index.tolist()
+selected_features = cor_target[cor_target.abs() > 0.1].index.tolist()
 print("Selected features:", selected_features)
 
 # 特征和目标变量
@@ -115,7 +115,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-# 扩展特征为多项式
+# 扩展特征为多项式duo
 poly = PolynomialFeatures(degree=3)
 X_poly = poly.fit_transform(X_train)
 
