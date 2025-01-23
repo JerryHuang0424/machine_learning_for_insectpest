@@ -34,7 +34,7 @@ correlation_matrix = df_cleaned.corr()
 # plt.title("Correlation Matrix")
 # plt.show()
 
-# 选择和目标变量"日期-首迁期"相关性较强的特征
+    # 选择和目标变量"日期-首迁期"相关性较强的特征
 target = "日期-首迁期"
 target = '本候灯下白背飞虱虫量（头）'
 cor_target = correlation_matrix[target].sort_values(ascending=False)

@@ -6,11 +6,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 
 #导入训练数据
-df = pd.read_excel('dealed_data(xlsx)/combined_华南.xlsx')
+df = pd.read_excel('dealed_data(xlsx)/combined_江淮.xlsx')
 
 # 时间转换
 df['首迁期'] = pd.to_datetime(df['首迁期'])
 df['首迁期'] = df['首迁期'].apply(lambda x: x.timestamp())
+
 df['日期'] = df['日期'].apply(lambda x: x.timestamp())
 
 #异常值的检测和清洗
@@ -40,8 +41,10 @@ print("Selected features for the brown insect:", selected_features_brown)
 #设置训练集的输入的特征
 X_white = df_cleaned[selected_features_white].drop(['本候灯下白背飞虱虫量（头）', '本候灯下稻飞虱合计', '本侯灯下褐飞虱虫量（头）', '925hPa_air','air2m'] ,axis=1)
 print("Final selected features for the white insect:", X_white.columns)
-X_Brown = df_cleaned[selected_features_brown].drop(['本候灯下白背飞虱虫量（头）', '本候灯下稻飞虱合计', '本侯灯下褐飞虱虫量（头）', '925hPa_air','air2m'] ,axis=1)
+#X_Brown = df_cleaned[selected_features_brown].drop(['本候灯下白背飞虱虫量（头）', '本候灯下稻飞虱合计', '本侯灯下褐飞虱虫量（头）', '925hPa_air','air2m'] ,axis=1)
+X_Brown = df_cleaned['1000hPa_air', '850hPa_air', '1000hPa_rhum']
 print("Final selected features for the brown insect:", X_Brown.columns)
+
 
 #设置训练集的目标特征
 y_white = df_cleaned[target_white].copy()  # 使用copy方法避免后续修改影响原始的df_cleaned数据
@@ -55,9 +58,14 @@ X_std_white = ss_white.fit_transform(X_white)
 ss_brown = StandardScaler()
 X_std_brown = ss_brown.fit_transform(X_Brown)
 
+rows_with_inf = df[np.isinf(df['本候灯下白背飞虱虫量（头）'])]
+# 输出包含无穷大值的行
+print(rows_with_inf)
+
 # 分割数据集
 X_train_white, X_test_white, y_train_white, y_test_white = train_test_split(X_std_white, y_white, test_size=0.2, random_state=0)
 X_train_brown, X_test_brown, y_train_brown, y_test_brown = train_test_split(X_std_brown, y_brown, test_size=0.2, random_state=0)
+
 
 #使用线性回归对虫数进行预测
 
@@ -85,7 +93,7 @@ print('\n')
 
 
 #导入正式的预测数据
-file_name = 'combined_华南ssp126.xlsx'
+file_name = 'combined_江淮ssp126.xlsx'
 df_pred = pd.read_excel(f'cipm_Data\{file_name}')
 
 #格式特殊的日期转换成时间戳格式
